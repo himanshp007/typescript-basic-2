@@ -16,23 +16,27 @@ router.get('/', (req, res, next) => {
     res.status(200).json({ todos: todos });
 });
 router.post('/todo', (req, res, next) => {
+    const body = req.body;
     const newTodo = {
         id: new Date().toISOString(),
-        text: req.body.text
+        text: body.text
     };
     todos.push(newTodo);
     res.status(201).json({ message: 'Todo added successfully', todos: todos });
 });
 router.delete('/todo/:id', (req, res, next) => {
-    const todoId = req.params.id;
+    const params = req.params;
+    const todoId = params.id;
     todos = todos.filter(todo => todo.id !== todoId);
     res.status(200).send({ message: 'Todo deleted successfully', todos: todos });
 });
 router.put('/todo/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const todoId = req.params.id;
+    const params = req.params;
+    const body = req.body;
+    const todoId = params.id;
     const index = todos.findIndex(todo => todo.id === todoId);
     if (index >= 0) {
-        todos[index] = { id: todos[index].id, text: req.body.text };
+        todos[index] = { id: todos[index].id, text: body.text };
         return res.status(200).send({ message: 'Todo edited successfully', todos: todos });
     }
     res.status(404).send({ message: 'Todo not found' });
